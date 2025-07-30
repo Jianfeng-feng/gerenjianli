@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>音卓尔后台管理系统</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      background: #f7f7f7;
+    }
+    .header {
+      background: #20c997;
+      color: #fff;
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header .title {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .header .user {
+      font-size: 16px;
+    }
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 220px;
+      background: #222d32;
+      color: #fff;
+      padding-top: 24px;
+      min-height: 100vh;
+      transition: width 0.2s;
+      position: relative;
+    }
+    .sidebar.collapsed {
+      width: 60px;
+    }
+    .sidebar h2 {
+      font-size: 18px;
+      margin: 0 0 24px 24px;
+      transition: opacity 0.2s;
+    }
+    .sidebar.collapsed h2 {
+      opacity: 0;
+    }
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .sidebar li {
+      padding: 12px 24px;
+      cursor: pointer;
+      font-size: 16px;
+      white-space: nowrap;
+      transition: padding 0.2s, font-size 0.2s;
+    }
+    .sidebar.collapsed li {
+      padding: 12px 10px;
+      font-size: 0;
+    }
+    .sidebar li::before {
+      content: '\25A0';
+      display: inline-block;
+      margin-right: 8px;
+      font-size: 14px;
+      color: #20c997;
+      vertical-align: middle;
+      transition: margin 0.2s;
+    }
+    .sidebar.collapsed li::before {
+      margin-right: 0;
+    }
+    .sidebar li:hover {
+      background: #1abc9c;
+    }
+    .sidebar-toggle {
+      position: absolute;
+      top: 10px;
+      right: -16px;
+      width: 32px;
+      height: 32px;
+      background: #20c997;
+      color: #fff;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      z-index: 10;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: right 0.2s;
+    }
+    .sidebar.collapsed .sidebar-toggle {
+      right: -16px;
+    }
+    .main {
+      flex: 1;
+      padding: 32px;
+      transition: margin-left 0.2s;
+    }
+    .section-title {
+      font-size: 18px;
+      margin-bottom: 16px;
+      font-weight: bold;
+    }
+    .dashboard {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      padding: 24px;
+      min-width: 180px;
+      flex: 1 1 180px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      position: relative;
+    }
+    .card .icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+      color: #20c997;
+    }
+    .card .label {
+      font-size: 16px;
+      color: #888;
+      margin-bottom: 4px;
+    }
+    .card .value {
+      font-size: 28px;
+      font-weight: bold;
+      color: #222;
+    }
+    .filter-bar {
+      margin-bottom: 24px;
+    }
+    .filter-bar button, .filter-bar input {
+      margin-right: 8px;
+      padding: 6px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: #fff;
+      cursor: pointer;
+    }
+    .filter-bar button.active {
+      background: #20c997;
+      color: #fff;
+      border-color: #20c997;
+    }
+    .hardware-dashboard {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .hardware-card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      padding: 16px;
+      min-width: 160px;
+      flex: 1 1 160px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      position: relative;
+      font-size: 14px;
+    }
+    .hardware-card .icon {
+      font-size: 24px;
+      margin-bottom: 4px;
+      color: #20c997;
+    }
+    .hardware-card .value {
+      font-size: 22px;
+      font-weight: bold;
+      color: #222;
+    }
+    .hardware-card .desc {
+      color: #888;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="title">音卓尔后台管理系统</div>
+    <div class="user">平台切换 &nbsp;|&nbsp; <b>admin</b></div>
+  </div>
+  <div class="container">
+    <div class="sidebar" id="sidebar">
+      <button class="sidebar-toggle" id="sidebarToggle" title="展开/收起菜单">&#9776;</button>
+      <h2>菜单</h2>
+      <ul>
+        <li>基础管理</li>
+        <li>产品管理</li>
+        <li>财务管理</li>
+        <li>运营管理</li>
+        <li>会员管理</li>
+        <li>渠道管理</li>
+        <li>系统管理</li>
+        <li>角色权限管理</li>
+        <li>员工与部门</li>
+        <li>APP配置</li>
+      </ul>
+    </div>
+    <div class="main">
+      <div class="section-title">综合数据看板</div>
+      <div class="dashboard">
+        <div class="card">
+          <div class="icon">📊</div>
+          <div class="label">设备总数</div>
+          <div class="value">742</div>
+        </div>
+        <div class="card">
+          <div class="icon">👤</div>
+          <div class="label">用户总数</div>
+          <div class="value">148</div>
+        </div>
+        <div class="card">
+          <div class="icon">🧑‍💻</div>
+          <div class="label">普通用户数</div>
+          <div class="value">70</div>
+        </div>
+        <div class="card">
+          <div class="icon">🪪</div>
+          <div class="label">基本卡用户数</div>
+          <div class="value">69</div>
+        </div>
+        <div class="card">
+          <div class="icon">💳</div>
+          <div class="label">季卡用户数</div>
+          <div class="value">2</div>
+        </div>
+        <div class="card">
+          <div class="icon">📅</div>
+          <div class="label">年卡用户数</div>
+          <div class="value">0</div>
+        </div>
+        <div class="card">
+          <div class="icon">2️⃣</div>
+          <div class="label">两年卡用户数</div>
+          <div class="value">7</div>
+        </div>
+      </div>
+      <div class="filter-bar">
+        <button class="active">昨日</button>
+        <button>今日</button>
+        <button>过去七天</button>
+        <button>过去30日</button>
+        <input type="date" value="2025-07-23"> 至 <input type="date" value="2025-07-23">
+      </div>
+      <div class="section-title">硬件数据看板</div>
+      <div class="hardware-dashboard">
+        <div class="hardware-card">
+          <div class="icon">📊</div>
+          <div class="label">总设备数</div>
+          <div class="value">35</div>
+          <div class="desc">T系列:0 TS系列:5 G系列:2 TX系列:12 A系列:16</div>
+        </div>
+        <div class="hardware-card">
+          <div class="icon">📶</div>
+          <div class="label">在线设备数</div>
+          <div class="value">1</div>
+          <div class="desc">T系列:0 TS系列:0 G系列:0 TX系列:0 A系列:1</div>
+        </div>
+        <div class="hardware-card">
+          <div class="icon">📴</div>
+          <div class="label">离线设备数</div>
+          <div class="value">34</div>
+          <div class="desc">T系列:0 TS系列:5 G系列:2 TX系列:12 A系列:15</div>
+        </div>
+        <div class="hardware-card">
+          <div class="icon">🔗</div>
+          <div class="label">绑定设备数</div>
+          <div class="value">2</div>
+          <div class="desc">T系列:0 TS系列:0 G系列:0 TX系列:2 A系列:0</div>
+        </div>
+        <div class="hardware-card">
+          <div class="icon">🎹</div>
+          <div class="label">硬件练琴人数</div>
+          <div class="value">1</div>
+          <div class="desc">T系列:0 TS系列:0 G系列:0 TX系列:0 A系列:1</div>
+        </div>
+        <div class="hardware-card">
+          <div class="icon">🎤</div>
+          <div class="label">硬件录音数</div>
+          <div class="value">20</div>
+          <div class="desc">T系列:0 TS系列:0 G系列:0 TX系列:8 A系列:12</div>
+        </div>
+        <div class="hardware-card">
+          <div class="icon">⏱️</div>
+          <div class="label">硬件练琴时长</div>
+          <div class="value">0.1 小时</div>
+        </div>
+        <div class="hardware-card">
+          <div class="icon">💬</div>
+          <div class="label">评论数</div>
+          <div class="value">0</div>
+        </div>
+        <div class="hardware-card">
+          <div class="icon">👍</div>
+          <div class="label">点赞数 (H5)</div>
+          <div class="value">0</div>
+        </div>
+        <div class="hardware-card">
+          <div class="icon">👍</div>
+          <div class="label">点赞数 (APP)</div>
+          <div class="value">0</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('sidebarToggle');
+    toggleBtn.addEventListener('click', function() {
+      sidebar.classList.toggle('collapsed');
+      if (sidebar.classList.contains('collapsed')) {
+        toggleBtn.innerHTML = '▶';
+      } else {
+        toggleBtn.innerHTML = '&#9776;';
+      }
+    });
+  </script>
+</body>
+</html> 
