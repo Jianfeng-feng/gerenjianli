@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Play Video on Image Click</title>
+<style>
+  /* 隐藏视频播放器 */
+  #myVideo {
+    display: none;
+  }
+  /* 视频播放器的全屏样式 */
+  .fullscreen-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    background-color: black;
+  }
+</style>
+</head>
+<body>
+
+<!-- 图片链接 -->
+<a href="javascript:void(0);" onclick="toggleVideo()">
+  <img src="static/picture/play.svg" alt="Image Description">
+</a>
+
+<!-- 视频播放器 -->
+<video id="myVideo" class="fullscreen-video" width="100%" height="100%" controls>
+  <source src="MVI_7310.MP4" type="video/mp4">
+  您的浏览器不支持视频标签。
+</video>
+
+<script>
+function toggleVideo() {
+  var video = document.getElementById('myVideo');
+  if (video.style.display === 'none') {
+    // 显示视频并全屏播放
+    video.style.display = 'block';
+    video.play();
+  } else {
+    // 隐藏视频并停止播放
+    video.style.display = 'none';
+    video.pause();
+  }
+}
+</script>
+
+</body>
+</html>
