@@ -4,10 +4,10 @@
 <!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
 <!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
 <meta name="description" content="Edrea">
 <meta name="author" content="marketify">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>冯建峰 | 产品经理</title>
 
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -23,7 +23,10 @@
 <div class="edrea_modalbox">
 <div class="box_inner">
 <div class="close">
-<a href="#"><img class="svg" src="static/picture/cancel.svg" alt=""></a>
+<a href="#" title="关闭">
+  <span class="sr-only">关闭</span>
+  <img class="svg" src="static/picture/cancel.svg" alt="关闭">
+</a>
 </div>
 <div class="modal_content">
 <h3 class="fixed_title"></h3>
@@ -51,7 +54,7 @@
 <div class="container">
 <div class="topbar_inner">
 <div class="logo">
-<a href=""><img src="static/picture/3.svg" alt=""></a>
+<a href="" title="主页"><img src="static/picture/3.svg" alt=""></a>
 </div>
 <div class="menu">
 <ul class="anchor_nav">
@@ -75,7 +78,7 @@
 <div class="container">
 <div class="mobile_in">
 <div class="logo">
-<a href="#"><img src="static/picture/3.svg" alt=""></a>
+<a href="#" title="主页"><img src="static/picture/3.svg" alt=""></a>
 </div>
 <div class="my_trigger">
 <div class="hamburger hamburger--collapse-r">
@@ -115,7 +118,7 @@
 <p class="description">你无法改变过去，也无法真正预知未来。你能做的，就是把握当下的每一刻，坚定前行，直到未来在你的人生故事中徐徐展开。</p>
 <div class="edrea_video_button">
 <span class="icon"><img class="svg" src="static/picture/play.svg" alt="svg">
-    <a href="MVI_7310.MP4"></a>
+    <a href="MVI_7310.MP4" title="播放宣传视频" aria-label="播放宣传视频"></a>
 </span>
 <div class="video_right">
 <span class="top">工作方式</span>
@@ -815,6 +818,14 @@
 <script>
 document.getElementById("send_message").onclick = function(e) {
   e.preventDefault();
+
+// 检测微信浏览器
+  var isWeixin = /MicroMessenger/i.test(navigator.userAgent);
+  if (isWeixin) {
+    alert("微信浏览器不支持直接发送邮件，请使用其他浏览器打开此页面");
+    return;
+  }
+
   var name = document.getElementById("name").value.trim();
   var email = document.getElementById("email").value.trim();
   var message = document.getElementById("message").value.trim();
@@ -837,6 +848,7 @@ document.getElementById("send_message").onclick = function(e) {
   var mailto_link = "mailto:1511406535@qq.com?subject=" + subject + "&body=" + body;
   window.location.href = mailto_link;
 };
+
 </script>
 </div>
 </div>
